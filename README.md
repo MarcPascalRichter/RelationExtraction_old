@@ -3,7 +3,7 @@ Die innerhalb der Masterarbeit ermittelten Ergebnisse mit dem Projekt *Wortschat
 
 Zum Training der REBEL-Komponente muss das Projekt `REBEL` (https://github.com/Babelscape/rebel) ausgeführt werden, zum Erstellen eines eigenen Datensatzes für Relationsextrktion muss das Projekt `cRocoDiLe` (https://github.com/Babelscape/crocodile) ausgeführt werden
 
-## Ausführen von Relationsekraktion
+## Ausführen von Relationsextraktion
 1. Ausführen von `download_datasets.sh`, um alle benötigten Daten von Wikidata und GND herunterzuladen
 2. Ausführen von `create_pipeline_data.py`, um für Pipeline benötigte Daten in korrektem Format zu erstellen
 3. Ausführen von `start_re.py`, um Pipeline zu starten (siehe Code für benötigte Arguments)
