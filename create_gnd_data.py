@@ -77,13 +77,12 @@ def create_gnd_wikidata_mapping():
                         gnd_wiki_dict[gnd_id] = entry["@id"].split('/')[-1]
             except:
                 continue
-
-    with open(DATASETS_PATH + 'gnd/gnd_wikidata_mapping.data', "wb") as f:
-        pickle.dump(gnd_wiki_dict, f)
+				
+	return gnd_wiki_dict
 			
 			
 	
-def create_gnd_relations():	
+def create_gnd_relations(gnd_wiki_mapping):	
 	attributes = ['founder', 'relatedSubject', 'isPartOf', 'associatedCountry', 'predecessor', 
               'successor', 'organizerOrHost', 'placeOfEvent', 'relatedPerson', 'associatedPlace', 'topic', 
               'placeOfDeath', 'placeOfBusiness', 'professionOrOccupation', 'placeOfBirth', 
@@ -99,9 +98,6 @@ def create_gnd_relations():
 			'januar', 'februar', 'märz', 'april', 'mai', 'juni', 'juli', 'august' 'september', 'oktober', 'november', 'dezember',
 			'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez',                   
 			'jan', 'feb', 'mär', 'apr', 'mai', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dez']
-
-    with open(DATASETS_PATH + 'gnd/gnd_wikidata_mapping.data',"rb") as file:
-        gnd_wikidata_mapping = pickle.load(file)
         
     gnd_triples = []
     
@@ -157,8 +153,8 @@ def create_gnd_relations():
 		
 def main():
 	create_gnd_files()
-	create_gnd_wikidata_mapping()
-	create_gnd_relations()
+	gnd_wiki_mapping = create_gnd_wikidata_mapping()
+	create_gnd_relations(gnd_wiki_mapping)
 
 
 

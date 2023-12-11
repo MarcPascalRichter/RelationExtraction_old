@@ -1,8 +1,8 @@
 import pandas as pd
 
-DATASETS_PATH = '/datasets/'
+OUTPUT_PATH = '/output/'
 
-WORTSCHATZ_PATH = DATASETS_PATH + 'wortschatz_leipzig/'
+WORTSCHATZ_PATH = OUTPUT_PATH + 'wortschatz/'
 
 if __name__ == '__main__':    
     relations_file = 'gnd_relations.tsv'
@@ -43,5 +43,5 @@ if __name__ == '__main__':
     grouped_df = merged_df.groupby('merge').apply(lambda x: pd.Series({'subject': x['gnd_subject_name'].iloc[0], 'subject_id': x['gnd_subject_id'].iloc[0], 'predicate': x['gnd_predicate'].iloc[0], 'object': x['gnd_object_name'].iloc[0], 'object_id': x['gnd_object_id'].iloc[0], 'texts': x[['text', 'date', 'url', 'source', 'confidence']].values.tolist()})).reset_index()
     
     grouped_df.drop('merge', axis=1, inplace=True)
-    grouped_df.to_csv('gnd_relations_with_texts.tsv', sep='\t')
+    grouped_df.to_csv(WORTSCHATZ_PATH + 'gnd_relations_with_texts.tsv', sep='\t')
     

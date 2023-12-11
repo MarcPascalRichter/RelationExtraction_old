@@ -8,7 +8,7 @@ import pandas as pd
 
 
 DATASETS_PATH = '/datasets/'
-CROCODILE_TEXT_PATH = '/crocodile_text/'
+CROCODILE_TEXT_PATH = '/datasets/crocodile_text/'
 
 
 
@@ -26,19 +26,31 @@ def get_wikidata_ids_in_wikipedia_abstracts():
 
 
 
-def create_wikidata_relations(wikidata_ids):
+def create_wikidata_relations(wikidata_ids = None):
     wikidata_relations = {}
     
     with open(DATASETS_PATH + 'wikidata/wikidata-triples.csv', 'r') as read_obj:
         csv_reader = reader(read_obj)
+		
+		if wikidata_ids == None:
         
-        for i, row in tqdm(enumerate(csv_reader)):
-            split = row[0].split('\t')
-            subj, rel, obj = split[0], split[1], split[2]
-            
-            if subj in wikidata_ids and (subj.startswith('Q') or 'http://www.w3.org/' in subj) and (obj.startswith('Q') or 'http://www.w3.org/' in obj):
-                subjobj = subj + '\t' + obj
-				wikidata_relations.setdefault(subjobj, []).append(rel)           
+			for i, row in tqdm(enumerate(csv_reader)):
+				split = row[0].split('\t')
+				subj, rel, obj = split[0], split[1], split[2]
+				
+				if (subj.startswith('Q') or 'http://www.w3.org/' in subj) and (obj.startswith('Q') or 'http://www.w3.org/' in obj):
+					subjobj = subj + '\t' + obj
+					wikidata_relations.setdefault(subjobj, []).append(rel)  
+
+		else:
+		
+			for i, row in tqdm(enumerate(csv_reader)):
+				split = row[0].split('\t')
+				subj, rel, obj = split[0], split[1], split[2]
+				
+				if subj in wikidata_ids and (subj.startswith('Q') or 'http://www.w3.org/' in subj) and (obj.startswith('Q') or 'http://www.w3.org/' in obj):
+					subjobj = subj + '\t' + obj
+					wikidata_relations.setdefault(subjobj, []).append(rel)
                     
     with open(DATASETS_PATH + "wikidata_relations.data", "wb") as f:
         pickle.dump(wikidata_relations, f)
@@ -76,17 +88,30 @@ def create_title_ids_mapping():
 		        
 		
         
-def create_subclass_relations(wikidata_ids):
+def create_subclass_relations(wikidata_ids = None):
     subclass_relations = {}
     
     with open(DATASETS_PATH + 'wikidata/wikidata-triples.csv', 'r') as read_obj:
         csv_reader = reader(read_obj)
-        for i, row in tqdm(enumerate(csv_reader)):
-            split = row[0].split('\t')
-            subj, rel, obj = split[0], split[1], split[2]
-            
-            if subj in wikidata_ids and subj.startswith('Q') and obj.startswith('Q') and rel == 'P279':
-				subclass_relations.setdefault(obj, []).append(subj)
+		
+		if wikidata_ids == None:
+		
+			for i, row in tqdm(enumerate(csv_reader)):
+				split = row[0].split('\t')
+				subj, rel, obj = split[0], split[1], split[2]
+				
+				if subj.startswith('Q') and obj.startswith('Q') and rel == 'P279':
+					subclass_relations.setdefault(obj, []).append(subj)
+					
+		else:
+		
+			for i, row in tqdm(enumerate(csv_reader)):
+				split = row[0].split('\t')
+				subj, rel, obj = split[0], split[1], split[2]
+				
+				if subj in wikidata_ids and subj.startswith('Q') and obj.startswith('Q') and rel == 'P279':
+					subclass_relations.setdefault(obj, []).append(subj)
+		
             
     with open(DATASETS_PATH + "subclass_relations.data", "wb") as f:
         pickle.dump(subclass_relations, f)
@@ -122,7 +147,8 @@ def create_country_mappings():
 
 
 def main():
-    wikidata_ids = get_wikidata_ids_in_wikipedia_abstracts()
+	wikidata_ids = None
+    #wikidata_ids = get_wikidata_ids_in_wikipedia_abstracts()
 
     create_wikidata_relations(wikidata_ids)
 	

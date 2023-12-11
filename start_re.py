@@ -36,7 +36,7 @@ parser.add_argument('--output_file', default = None,
                     help = 'file to save the triples')
 parser.add_argument('--enter_text', default = 'no', 
                     help = 'yes when entering and processing single sentences')
-parser.add_argument('--confidence_score', default = '0.0', 
+parser.add_argument('--confidence_score', default = '0.97', 
                     help = 'min. score to evaluate a triple as confident')
 parser.add_argument('--pre', default = None, 
                     help = 'preprocessed file')
@@ -45,6 +45,7 @@ args = parser.parse_args()
 
 SPACY_MODEL =                     'de_core_news_lg'
 DATASETS_PATH =                   '/datasets/'
+OUTPUT_PATH =					  '/output/'
 
 subclass_relations_file =         DATASETS_PATH + 'subclass_relations.data'
 wikidata_relations_file =         DATASETS_PATH + 'wikidata_relations.data'
@@ -203,9 +204,9 @@ if __name__ == '__main__':
         
         logging.info('Writing triples to file')
         interval_start = default_timer()
-        writer = Writer(args.output_file)
+        writer = Writer(OUTPUT_PATH + args.output_file)
         writer.run(data)
         logging.info(f'Finished in {(default_timer() - interval_start)}')
         
-        logging.info(f'Complete relation extraction (w/o creatinf Text objects) finished in {(default_timer() - start_time)}')
+        logging.info(f'Complete relation extraction (w/o creating Text objects) finished in {(default_timer() - start_time)}')
         
